@@ -45,10 +45,22 @@ function show(id) {
   window.scrollTo(0, 0);
 }
 
+/* ───────── 역량별 색·아이콘 (Memphis) ───────── */
+const DCOL = [['#ff5c8a', '#ffe4ec'], ['#16b3a3', '#dcf5f1'], ['#ffc93c', '#fff3c8'], ['#ff5c8a', '#ffe4ec'], ['#16b3a3', '#dcf5f1'], ['#ffc93c', '#fff3c8']];
+const ICONS = [
+  c => `<path d="M20 4l14 6v9c0 9-6 15-14 18C12 34 6 28 6 19v-9z" fill="${c}" stroke="#1d2a5c" stroke-width="3" stroke-linejoin="round"/>`,
+  c => `<circle cx="17" cy="17" r="11" fill="${c}" stroke="#1d2a5c" stroke-width="3"/><path d="M25 25l9 9" stroke="#1d2a5c" stroke-width="4" stroke-linecap="round"/>`,
+  c => `<rect x="5" y="7" width="30" height="22" rx="5" fill="${c}" stroke="#1d2a5c" stroke-width="3"/><path d="M14 35h12" stroke="#1d2a5c" stroke-width="4" stroke-linecap="round"/>`,
+  c => `<rect x="5" y="20" width="8" height="15" rx="2" fill="${c}" stroke="#1d2a5c" stroke-width="3"/><rect x="16" y="12" width="8" height="23" rx="2" fill="${c}" stroke="#1d2a5c" stroke-width="3"/><rect x="27" y="5" width="8" height="30" rx="2" fill="${c}" stroke="#1d2a5c" stroke-width="3"/>`,
+  c => `<path d="M4 20q4-8 8 0t8 0t8 0t8 0" fill="none" stroke="${c}" stroke-width="5" stroke-linecap="round"/><path d="M8 32l6-6M8 26l6 6M26 6l6 6M26 12l6-6" stroke="#1d2a5c" stroke-width="3" stroke-linecap="round"/>`,
+  c => `<path d="M20 3l4 10 10 4-10 4-4 10-4-10-10-4 10-4z" fill="${c}" stroke="#1d2a5c" stroke-width="3" stroke-linejoin="round"/><circle cx="33" cy="33" r="4" fill="#1d2a5c"/>`
+];
+const icon = i => `<svg class="ico" viewBox="0 0 40 40" aria-hidden="true">${ICONS[i](DCOL[i][0])}</svg>`;
+
 /* ───────── 시작 화면 ───────── */
 function renderIntro() {
   $('domainStrip').innerHTML = DOMAINS.map((d, i) =>
-    `<div><i style="--o:${0.35 + i * 0.13}"></i><b>${d}</b><span>${DESC[i]}</span></div>`).join('');
+    `<div style="background:${DCOL[i][1]}">${icon(i)}<b>${d}</b><span>${DESC[i]}</span></div>`).join('');
   const prev = load();
   if (prev && Object.keys(prev.answers).length && !prev.submitted) {
     const n = QS.filter(q => prev.answers[q.id]).length;
@@ -98,7 +110,7 @@ function renderQ(dir) {
   const val = S.answers[q.id] || 0;
   const hint = q.a === 0 ? '평소 생각과 실천에 가까운 정도를 골라 주세요.' : '지금 실제로 할 수 있는 정도를 골라 주세요.';
   $('qcard').innerHTML = `
-    ${firstOfDomain ? `<div class="domain-intro"><span class="di-n num">${q.d + 1}/6</span><div><b>${DOMAINS[q.d]}</b><span>${DESC[q.d]}</span></div></div>` : ''}
+    ${firstOfDomain ? `<div class="domain-intro" style="--dcol:${DCOL[q.d][0]};--dcol-soft:${DCOL[q.d][1]}"><span class="di-n num">${q.d + 1}/6</span><div><b>${DOMAINS[q.d]}</b><span>${DESC[q.d]}</span></div></div>` : ''}
     <p class="q-label">${DOMAINS[q.d]} <span>· ${AREAS[q.a]} · ${pos}/${domainQs.length}</span></p>
     <h2 class="q-text" id="qText" tabindex="-1">${esc(q.text)}</h2>
     <p class="q-hint">${hint}</p>
@@ -204,11 +216,11 @@ function radarSVG(ds) {
   };
   const ring = v => DOMAINS.map((_, i) => pt(i, v).map(x => x.toFixed(1)).join(',')).join(' ');
   let g = '';
-  [2, 3, 4, 5].forEach(v => (g += `<polygon points="${ring(v)}" fill="none" stroke="#ffffff22" stroke-width="1"/>`));
-  DOMAINS.forEach((_, i) => { const [x, y] = pt(i, 5); g += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#ffffff1a"/>`; });
+  [2, 3, 4, 5].forEach(v => (g += `<polygon points="${ring(v)}" fill="none" stroke="#1d2a5c33" stroke-width="1.5"/>`));
+  DOMAINS.forEach((_, i) => { const [x, y] = pt(i, 5); g += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#1d2a5c26"/>`; });
   const poly = ds.map((v, i) => pt(i, v).map(x => x.toFixed(1)).join(',')).join(' ');
-  g += `<polygon points="${poly}" fill="#7fd0bf40" stroke="#7fd0bf" stroke-width="2.5" stroke-linejoin="round"/>`;
-  ds.forEach((v, i) => { const [x, y] = pt(i, v); g += `<circle cx="${x}" cy="${y}" r="4.5" fill="#7fd0bf"/>`; });
+  g += `<polygon points="${poly}" fill="#ff5c8a40" stroke="#ff5c8a" stroke-width="3" stroke-linejoin="round"/>`;
+  ds.forEach((v, i) => { const [x, y] = pt(i, v); g += `<circle cx="${x}" cy="${y}" r="5.5" fill="#1d2a5c"/>`; });
   DOMAINS.forEach((d, i) => {
     const a = -Math.PI / 2 + i * 2 * Math.PI / n;
     const x = cx + (R + 34) * Math.cos(a), y = cy + (R + 30) * Math.sin(a);
