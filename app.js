@@ -2,6 +2,7 @@
 /* 미래과학교육원 AI·디지털 역량진단 — 응답자 화면 */
 const M = window.MIGWA;
 const CFG = window.MIGWA_CONFIG || {};
+const LIVE = !!(CFG.supabaseUrl && CFG.supabaseKey);
 const { QS, DOMAINS, DESC, PRACTICES, COURSES, TOPICS } = M;
 const AREAS = ['태도', '이해', '적용', '설계'];
 const SCALE = ['전혀 그렇지 않다', '그렇지 않다', '보통이다', '그렇다', '매우 그렇다'];
@@ -12,7 +13,8 @@ const N = QS.length;
 const $ = id => document.getElementById(id);
 const mean = a => a.reduce((s, v) => s + v, 0) / a.length;
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const uuid = () => (crypto.randomUUID ? crypto.randomUUID() : 'r' + Date.now().toString(36) + Math.random().toString(36).slice(2));
+const uuid = () => (crypto.randomUUID ? crypto.randomUUID() :
+  'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => { const r = crypto.getRandomValues(new Uint8Array(1))[0] & 15; return (c === 'x' ? r : (r & 3) | 8).toString(16); }));
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 let S = fresh();
@@ -331,6 +333,7 @@ function syncSubmitted() {
 $('submitBtn').onclick = async () => {
   if (S.submitted) return;
   const st = $('submitStatus');
+  if (location.hash === '#demo') { st.className = 'status err'; st.textContent = '예시 결과 화면이라 제출되지 않아요. 직접 진단한 뒤 제출해 주세요.'; return; }
   if (!S.preferred) { st.className = 'status err'; st.textContent = '희망 연수를 하나 골라 주세요.'; $('prefList').querySelector('input').focus(); return; }
   if (!$('consent').checked) { st.className = 'status err'; st.textContent = '익명 활용 동의에 체크해 주세요.'; $('consent').focus(); return; }
   const r = report;
@@ -342,10 +345,14 @@ $('submitBtn').onclick = async () => {
   const btn = $('submitBtn'); btn.disabled = true; btn.textContent = '보내는 중…';
   st.className = 'status'; st.textContent = '';
   try {
-    if (CFG.endpoint) {
-      const res = await fetch(CFG.endpoint, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
-      const body = await res.json();
-      if (!body.ok) throw Error(body.error || '저장하지 못했어요.');
+    if (LIVE) {
+      const res = await fetch(`${CFG.supabaseUrl}/rest/v1/rpc/migwa_submit`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', apikey: CFG.supabaseKey },
+        body: JSON.stringify({ payload })
+      });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok || !body.ok) throw Error(body.message || '저장하지 못했어요.');
     } else {
       // 서버 주소가 없으면 미리보기 모드: 이 기기에만 저장
       const list = JSON.parse(localStorage.getItem(LOCAL_SUBMITS) || '[]');
@@ -355,7 +362,7 @@ $('submitBtn').onclick = async () => {
     S.submitted = true; save();
     renderPrefs(r.courses.filter(c => !c.why.length).slice(0, 3));
     syncSubmitted();
-    if (!CFG.endpoint) st.textContent = '미리보기 모드라 이 기기에만 저장했어요. (config.js에 제출 주소를 넣으면 실제로 모입니다)';
+    if (!LIVE) st.textContent = '미리보기 모드라 이 기기에만 저장했어요. (config.js에 수파베이스 주소를 넣으면 실제로 모입니다)';
   } catch (e) {
     btn.disabled = false; btn.textContent = '다시 제출';
     st.className = 'status err';

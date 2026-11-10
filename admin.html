@@ -52,10 +52,12 @@
 <main class="wrap adm">
   <section class="login" id="loginBox">
     <h1 style="font-size:28px">연수 수요 분석</h1>
-    <p class="sub">Apps Script에서 정한 관리자 비밀번호를 입력하세요.</p>
+    <p class="sub">관리자로 등록된 수파베이스 계정으로 로그인하세요.</p>
     <form id="loginForm">
-      <label class="sr" for="key">관리자 비밀번호</label>
-      <input id="key" type="password" autocomplete="current-password" placeholder="관리자 비밀번호">
+      <label class="sr" for="email">이메일</label>
+      <input id="email" type="email" autocomplete="username" placeholder="이메일" required style="margin-bottom:0">
+      <label class="sr" for="key">비밀번호</label>
+      <input id="key" type="password" autocomplete="current-password" placeholder="비밀번호" required>
       <button class="btn" style="width:100%">들어가기</button>
     </form>
     <p class="status err" id="loginStatus" role="status"></p>
@@ -64,7 +66,7 @@
   <div id="dash" hidden>
     <h1>연수 수요 분석</h1>
     <p class="sub">익명 제출 응답을 모아 봅니다. 숨긴 응답은 통계와 CSV에서 빠지며, 시트에서 다시 살릴 수 있어요.</p>
-    <p class="demo-note" id="demoNote" hidden>미리보기 모드: config.js에 제출 주소가 없어 이 브라우저에 저장된 제출만 보여요.</p>
+    <p class="demo-note" id="demoNote" hidden>미리보기 모드: config.js에 수파베이스 주소가 없어 이 브라우저에 저장된 제출만 보여요.</p>
 
     <form class="filters" id="filters">
       <label>학교급<select id="fSchool"><option value="">전체</option><option>유치원</option><option>초등</option><option value="중등">중등</option><option>특수</option><option>기타</option></select></label>

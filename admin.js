@@ -2,8 +2,8 @@
 /* 미래과학교육원 AI·디지털 역량진단 — 관리자 통계 */
 const { QS, DOMAINS, COURSES, TOPICS } = window.MIGWA;
 const CFG = window.MIGWA_CONFIG || {};
-const DEMO = !CFG.endpoint;
-const KEY_STORE = 'migwa.v2.adminKey';
+const DEMO = !(CFG.supabaseUrl && CFG.supabaseKey);
+const KEY_STORE = 'migwa.v2.adminSession';
 const LOCAL_SUBMITS = 'migwa.v2.localSubmissions';
 const PAGE = 20;
 
@@ -27,11 +27,43 @@ async function api(body) {
       return { ok: true, changed: body.ids.length };
     }
   }
-  const key = sessionStorage.getItem(KEY_STORE) || '';
-  const res = await fetch(CFG.endpoint, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ ...body, key }) });
-  const data = await res.json();
-  if (!data.ok) throw Error(data.error || '요청을 처리하지 못했어요.');
-  return data;
+  if (body.action === 'list') {
+    const rows = await rpc('migwa_admin_list', {});
+    return { ok: true, items: rows };
+  }
+  if (body.action === 'delete') {
+    const n = await rpc('migwa_admin_hide', { ids: body.ids });
+    return { ok: true, changed: n };
+  }
+}
+
+/* ── Supabase 로그인·호출 ── */
+function session() { try { return JSON.parse(sessionStorage.getItem(KEY_STORE) || 'null'); } catch (e) { return null; } }
+async function auth(grant, body) {
+  const res = await fetch(`${CFG.supabaseUrl}/auth/v1/token?grant_type=${grant}`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json', apikey: CFG.supabaseKey }, body: JSON.stringify(body)
+  });
+  const d = await res.json().catch(() => ({}));
+  if (!res.ok) throw Error(/invalid/i.test(d.error_description || d.msg || d.error || '') ? '이메일 또는 비밀번호가 맞지 않아요.' : (d.error_description || d.msg || '로그인하지 못했어요.'));
+  const s = { access: d.access_token, refresh: d.refresh_token, exp: Date.now() + (d.expires_in - 60) * 1000, email: d.user?.email };
+  sessionStorage.setItem(KEY_STORE, JSON.stringify(s));
+  return s;
+}
+async function token() {
+  let s = session();
+  if (!s) throw Error('로그인이 필요해요.');
+  if (Date.now() > s.exp) s = await auth('refresh_token', { refresh_token: s.refresh });
+  return s.access;
+}
+async function rpc(name, args) {
+  const res = await fetch(`${CFG.supabaseUrl}/rest/v1/rpc/${name}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', apikey: CFG.supabaseKey, Authorization: `Bearer ${await token()}` },
+    body: JSON.stringify(args)
+  });
+  const d = await res.json().catch(() => null);
+  if (!res.ok) throw Error(d?.message || '요청을 처리하지 못했어요.');
+  return d;
 }
 
 function hbar(label, text, pct, low) {
@@ -47,7 +79,7 @@ async function load() {
     $('status').textContent = `${new Date().toLocaleTimeString('ko-KR')} 기준 · 전체 ${all.length}건`;
   } catch (e) {
     $('status').textContent = e.message;
-    if (/비밀번호/.test(e.message)) logout();
+    if (/로그인|권한|JWT/i.test(e.message)) { logout(); $('loginStatus').textContent = e.message; }
   }
 }
 
@@ -124,10 +156,14 @@ function logout() { sessionStorage.removeItem(KEY_STORE); $('dash').hidden = tru
 
 $('loginForm').onsubmit = async e => {
   e.preventDefault();
-  sessionStorage.setItem(KEY_STORE, $('key').value);
   $('loginStatus').textContent = '확인 중…';
-  try { await api({ action: 'list' }); $('loginStatus').textContent = ''; enter(); }
-  catch (err) { $('loginStatus').textContent = err.message; sessionStorage.removeItem(KEY_STORE); }
+  try {
+    const s = await auth('password', { email: $('email').value.trim(), password: $('key').value });
+    $('key').value = '';
+    const ok = await rpc('migwa_is_admin', {});
+    if (!ok) { sessionStorage.removeItem(KEY_STORE); throw Error(`${s.email} 계정은 아직 관리자로 등록되지 않았어요. 수파베이스에서 migwa_admins 표에 이 계정을 추가해 주세요.`); }
+    $('loginStatus').textContent = ''; enter();
+  } catch (err) { $('loginStatus').textContent = err.message; }
 };
 $('logout').onclick = logout;
 $('filters').onsubmit = e => { e.preventDefault(); if ($('fFrom').value && $('fTo').value && $('fFrom').value > $('fTo').value) { $('status').textContent = '시작일이 종료일보다 늦어요.'; return; } applyFilter(); };
@@ -155,4 +191,4 @@ $('hideSel').onclick = async () => {
   catch (e) { $('status').textContent = e.message; $('hideSel').disabled = false; }
 };
 
-if (DEMO || sessionStorage.getItem(KEY_STORE)) enter();
+if (DEMO || session()) enter();
