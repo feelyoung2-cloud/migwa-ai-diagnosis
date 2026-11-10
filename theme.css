@@ -76,28 +76,22 @@ body{background:var(--ground)}
 .domain-strip i{display:none}
 
 /* 진단 화면 */
-.survey{background:var(--ground) var(--confetti);background-size:260px}
+.survey{background:var(--ground)}
 .sv-head{background:transparent}
 .sv-head .wrap{background:var(--ground);border-radius:0 0 20px 20px}
-.qcard{background:var(--surface);border-radius:28px;padding:clamp(20px,3.4vw,40px);box-shadow:inset 0 0 0 3px var(--ink),10px 10px 0 var(--teal)}
-.sv-foot{background:var(--surface);border-radius:999px;padding:10px 12px;margin-bottom:24px;box-shadow:inset 0 0 0 2px var(--ink)}
+.qcard{background:var(--surface);border-radius:24px;padding:clamp(20px,3.4vw,40px);box-shadow:inset 0 0 0 1.5px var(--surface-3)}
+.sv-foot{margin-bottom:24px}
 .seg .track{height:8px;border-radius:4px;background:var(--surface-3)}
-.seg:nth-child(3n+1) .fill{background:var(--pink)}
-.seg:nth-child(3n+2) .fill{background:var(--teal)}
-.seg:nth-child(3n) .fill{background:var(--yellow)}
+.seg .fill{background:var(--teal)}
 .q-label{color:var(--teal-ink)}
-.domain-intro{background:var(--dcol-soft,var(--yellow-soft));color:var(--ink);box-shadow:inset 0 0 0 2px var(--ink)}
+.domain-intro{background:var(--surface-2);color:var(--ink)}
 .domain-intro span{color:var(--ink-2)}
-.domain-intro .di-n{color:var(--ink);background:var(--dcol,var(--yellow));border-radius:16px;padding:10px 12px;min-width:0;font-size:24px;white-space:nowrap;flex:none}
+.domain-intro .di-n{color:var(--ink);background:var(--dcol-soft,var(--yellow-soft));border-radius:14px;padding:10px 12px;min-width:0;font-size:24px;white-space:nowrap;flex:none}
 .ans{background:var(--surface-2)}
-.ans[data-v="1"] .dot{background:var(--pink-soft)}
-.ans[data-v="2"] .dot{background:#ffeedd}
-.ans[data-v="3"] .dot{background:var(--yellow-soft)}
-.ans[data-v="4"] .dot{background:#e6f6d9}
-.ans[data-v="5"] .dot{background:var(--teal-soft)}
-.ans:hover{background:var(--yellow-soft)}
+.ans .dot{background:var(--surface)}
+.ans:hover{background:var(--teal-soft)}
 .ans[aria-checked=true]{background:var(--ink);color:#fff}
-.ans[aria-checked=true] .dot{background:var(--yellow);color:var(--ink)}
+.ans[aria-checked=true] .dot{background:#ffffff2e;color:#fff}
 
 /* 결과 화면 */
 .res-hero{background:var(--yellow-soft) var(--confetti);background-size:260px;color:var(--ink);box-shadow:inset 0 0 0 3px var(--ink)}
@@ -144,8 +138,7 @@ body{background:var(--ground)}
 @media (max-width:900px){.memphis.m1{display:none}}
 @media (max-width:640px){
   .start-card{box-shadow:inset 0 0 0 3px var(--ink),6px 6px 0 var(--pink)}
-  .qcard{box-shadow:inset 0 0 0 3px var(--ink),6px 6px 0 var(--teal);padding:18px}
-  .sv-foot{border-radius:20px}
+  .qcard{padding:18px}
   .memphis.m2{width:96px;right:-18px;top:-6px}
   .people{max-width:300px;margin:16px auto 0}
 }
