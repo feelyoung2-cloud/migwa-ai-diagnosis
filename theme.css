@@ -146,3 +146,16 @@ body{background:var(--ground)}
   .res-hero,.survey{background-image:none}
   .foot,.memphis{display:none}
 }
+
+/* 연수 지도 영상 */
+.video-band{margin-top:clamp(40px,7vh,80px);display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(20px,3vw,40px);align-items:center}
+.video-head h2{font-size:clamp(28px,3vw,40px);font-weight:800;letter-spacing:-.04em;line-height:1.25;margin:0}
+.video-head p{margin-top:12px;color:var(--ink-2);font-size:17px;line-height:1.6;max-width:28em}
+.video-frame{border-radius:24px;overflow:hidden;background:var(--ink);color:#fff;box-shadow:inset 0 0 0 3px var(--ink),10px 10px 0 var(--yellow);padding:3px}
+.video-frame a{color:#ffd21f}
+.video-frame video{display:block;width:100%;height:auto;aspect-ratio:16/9;border-radius:21px;background:#000}
+@media (max-width:900px){.video-band{grid-template-columns:1fr}}
+@media (max-width:640px){.video-frame{box-shadow:inset 0 0 0 3px var(--ink),6px 6px 0 var(--yellow)}}
+@media print{.video-band{display:none}}
+
+.bar-links .btn{white-space:nowrap}
