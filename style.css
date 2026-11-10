@@ -270,3 +270,5 @@ a{color:var(--accent)}
 .now li b{display:block;font-size:16px}
 .now li span{color:var(--ink-2)}
 .panel h2.ph{font-size:19px;letter-spacing:-.03em;font-weight:700}
+.brand-logo{height:52px;width:auto;mix-blend-mode:multiply}
+@media (max-width:640px){.brand-logo{height:42px}}
