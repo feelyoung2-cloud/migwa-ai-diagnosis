@@ -2,8 +2,9 @@
 
 교원이 61문항을 탭 한 번씩으로 응답하면, 6개 역량 점수와 2026 경기도교육청미래과학교육원 연수 추천을 바로 보여 주는 웹앱입니다. 응답은 원할 때만 익명으로 수파베이스(Supabase)에 모입니다.
 
-- 설문: https://feelyoung2-cloud.github.io/migwa-ai-diagnosis/
-- 관리자: https://feelyoung2-cloud.github.io/migwa-ai-diagnosis/admin.html
+- 설문: https://migwa-ai.vercel.app
+- 관리자: https://migwa-ai.vercel.app/admin.html
+- (예전 주소 https://feelyoung2-cloud.github.io/migwa-ai-diagnosis/ 도 같은 DB로 동작)
 
 ## 파일
 
@@ -39,7 +40,7 @@
 git add -A && git commit -m "수정" && git push
 ```
 
-1~2분 뒤 GitHub Pages에 반영됩니다.
+push하면 Vercel(migwa-ai 프로젝트)과 GitHub Pages에 1~2분 안에 자동 반영됩니다.
 
 ## 미리보기
 
