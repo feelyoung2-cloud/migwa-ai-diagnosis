@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>AI·디지털 역량진단 | 경기도교육청미래과학교육원</title>
+<meta name="description" content="61문항 자기진단으로 나의 AI·디지털 역량을 확인하고 2026 미래과학교육원 직무연수를 추천받으세요.">
+<meta name="theme-color" content="#f3f5f4">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ───────── 시작 ───────── -->
+<div id="intro">
+  <header class="bar"><div class="wrap bar-in">
+    <a class="brand" href="./"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3 12V4l5 5 5-5v8" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>미래과학교육원 <small>AI·디지털 역량진단</small></a>
+  </div></header>
+
+  <main class="wrap intro">
+    <div class="intro-grid">
+      <div>
+        <h1>AI·디지털<br>역량진단</h1>
+        <p class="claim">탭 61번이면 나에게 맞는 2026 연수가 보여요.</p>
+        <p class="lede">6개 역량을 스스로 점검하고, 결과에 맞춰 2026 경기도교육청미래과학교육원 AI·디지털 직무연수를 추천해 드려요. 정답이 없는 자기진단이니 떠오르는 대로 고르면 됩니다.</p>
+        <ul class="facts">
+          <li>약 7분</li>
+          <li>한 번 탭하면 다음 문항</li>
+          <li>자동 저장 · 이어하기</li>
+          <li>이름·학교명 수집 없음</li>
+        </ul>
+      </div>
+
+      <section class="start-card" aria-labelledby="startTitle">
+        <h2 id="startTitle">학교급을 고르면 바로 시작해요</h2>
+        <p class="sub">추천 연수의 대상 확인에만 쓰여요.</p>
+        <div class="school-grid" id="schoolGrid">
+          <button class="school" data-school="유치원">유치원</button>
+          <button class="school" data-school="초등">초등</button>
+          <button class="school" data-school="중등">중등<small>중학교·고등학교</small></button>
+          <button class="school" data-school="특수">특수</button>
+          <button class="school wide" data-school="기타">기타 <small>교육전문직 등</small></button>
+        </div>
+        <div class="resume" id="resume" hidden>
+          <div><b>하던 진단이 있어요</b><span id="resumeInfo"></span></div>
+          <div style="display:flex;gap:6px">
+            <button class="btn small" id="resumeBtn">이어하기</button>
+            <button class="btn small ghost" id="freshBtn">새로</button>
+          </div>
+        </div>
+        <p class="privacy">진단 결과는 이 기기에서만 계산돼요. 마지막에 원하실 때만 학교급·응답·희망 연수를 익명으로 제출하며, 연수 수요 분석에만 사용합니다.</p>
+      </section>
+    </div>
+
+    <div class="domain-strip" id="domainStrip" aria-label="진단하는 6개 역량"></div>
+  </main>
+</div>
+
+<!-- ───────── 진단 ───────── -->
+<div id="survey" class="survey" hidden>
+  <div class="sv-head"><div class="wrap">
+    <div class="sv-row">
+      <button class="btn text small" id="homeBtn" aria-label="처음 화면으로">← 처음</button>
+      <p class="sv-count num" aria-live="polite"><b id="count">0</b> <span>/ 61</span></p>
+      <span class="saved" id="savedNote">자동 저장됨</span>
+    </div>
+    <nav class="segs" id="segs" aria-label="역량별 진행"></nav>
+  </div></div>
+
+  <main class="wrap sv-main">
+    <div class="qcard" id="qcard"></div>
+  </main>
+
+  <div class="wrap"><div class="sv-foot">
+    <button class="btn ghost small" id="prevBtn">← 이전 문항</button>
+    <p class="kbd-hint">키보드 <kbd>1</kbd>~<kbd>5</kbd>로 고르고 <kbd>←</kbd>로 돌아가요</p>
+    <button class="btn small" id="toResultBtn" hidden>결과 보기 →</button>
+  </div></div>
+</div>
+
+<!-- ───────── 결과 ───────── -->
+<div id="result" hidden>
+  <header class="bar no-print"><div class="wrap bar-in">
+    <a class="brand" href="./"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3 12V4l5 5 5-5v8" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>미래과학교육원 <small>AI·디지털 역량진단</small></a>
+    <div class="bar-links">
+      <button class="btn text small" id="editBtn">응답 고치기</button>
+      <button class="btn ghost small" id="printBtn">PDF 저장</button>
+    </div>
+  </div></header>
+
+  <main class="wrap result" id="resultMain">
+    <section class="res-hero">
+      <div>
+        <h1 id="resultTitle" tabindex="-1">나의 AI·디지털 역량 진단 결과</h1>
+        <p class="res-meta" id="resMeta"></p>
+        <div class="score-big"><b class="num" id="overall">0.00</b><span>/ 5점 종합</span></div>
+        <span class="level-pill" id="levelPill"></span>
+        <p class="level-note" id="levelNote"></p>
+      </div>
+      <svg class="radar" id="radar" viewBox="0 0 440 400" role="img" aria-labelledby="radarT"><title id="radarT">6개 역량 점수 방사형 그래프</title></svg>
+    </section>
+
+    <section class="res-section">
+      <h2>역량별로 보면</h2>
+      <p class="sec-sub">막대는 1점을 0, 5점을 끝으로 그려요. 주황 막대는 3점 미만이라 먼저 채우면 좋은 역량입니다.</p>
+      <div class="split">
+        <div class="panel">
+          <h3>6개 역량 점수</h3>
+          <div id="dbars"></div>
+          <div class="area-row" id="areaRow"></div>
+        </div>
+        <div class="panel">
+          <h3>강점과 다음 걸음</h3>
+          <div class="sw-list" id="swList"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="res-section" aria-labelledby="recTitle">
+      <h2 id="recTitle">나에게 맞는 2026 연수</h2>
+      <p class="sec-sub">역량 점수와 학교급을 바탕으로 수준이 맞고 보완 효과가 큰 과정을 골랐어요. 관심 주제를 누르면 순서가 바뀝니다.</p>
+      <div class="topics" id="topics" role="group" aria-label="관심 주제"></div>
+      <div id="recs"></div>
+      <details class="catalog" id="catalogWrap"><summary style="padding:18px 22px">전체 연수 한눈에 보기 <small id="catalogCount"></small></summary><div id="catalog"></div></details>
+    </section>
+
+    <section class="res-section no-print" aria-labelledby="subTitle">
+      <h2 id="subTitle">희망 연수를 알려 주세요</h2>
+      <p class="sec-sub">익명으로 모아 내년 연수 기획에 반영해요. 이름·학교명·이메일은 받지 않습니다.</p>
+      <div class="submit-box">
+        <div>
+          <b>가장 듣고 싶은 연수 1개</b>
+          <div class="pref-list" id="prefList" role="radiogroup" aria-label="희망 연수"></div>
+        </div>
+        <div>
+          <b>제출하면 저장되는 것</b>
+          <p style="color:var(--ink-2);font-size:15px;margin-top:10px">학교급, 61문항 응답과 역량 점수, 추천 연수, 희망 연수, 관심 주제, 제출일. 응답자를 알아볼 수 있는 정보는 없어요.</p>
+          <label class="consent"><input type="checkbox" id="consent"> 위 내용을 익명 연수 수요 분석에 쓰는 데 동의해요.</label>
+          <div class="res-actions">
+            <button class="btn" id="submitBtn">익명으로 제출</button>
+          </div>
+          <p class="status" id="submitStatus" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+      <div class="res-actions">
+        <button class="btn ghost" id="printBtn2">결과 PDF로 저장</button>
+        <button class="btn ghost" id="htmlBtn">결과 파일(HTML) 저장</button>
+        <button class="btn text" id="resetBtn">처음부터 다시</button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<footer class="foot no-print"><div class="wrap">
+  <b>경기도교육청미래과학교육원</b>
+  교원 AI·디지털 역량 자기진단 · 추천은 운영계획 공문을 바탕으로 한 참고용이며, 선발·신청 일정은 각 기수 공문과 연수원 안내를 따르세요.
+</div></footer>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="config.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
