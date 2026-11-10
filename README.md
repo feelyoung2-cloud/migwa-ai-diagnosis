@@ -40,7 +40,7 @@
 git add -A && git commit -m "수정" && git push
 ```
 
-push하면 Vercel(migwa-ai 프로젝트)과 GitHub Pages에 1~2분 안에 자동 반영됩니다.
+push하면 GitHub Pages에는 1~2분 안에 자동 반영됩니다. Vercel(migwa-ai 프로젝트)은 자동 반영이 안 될 수 있으니, 안 되면 Vercel 대시보드에서 Redeploy 하세요.
 
 ## 미리보기
 
